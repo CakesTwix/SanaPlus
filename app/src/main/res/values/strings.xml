@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">SanaPlus</string>
+    <string name="action_settings">Settings</string>
+    <string name="balance">Balance</string>
+    <string name="status">Status</string>
+    <string name="my_account">My Account</string>
+    <string name="speed">Speed</string>
+    <string name="test">test</string>
+</resources>
