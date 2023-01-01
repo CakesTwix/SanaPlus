@@ -6,4 +6,9 @@
     <string name="my_account">My Account</string>
     <string name="speed">Speed</string>
     <string name="test">test</string>
+    <string name="datestop">Paid to</string>
+    <string name="credit">Credit</string>
+    <string name="menu_internet">Internet</string>
+    <string name="menu_tv">TV</string>
+    <string name="menu_other">Other</string>
 </resources>

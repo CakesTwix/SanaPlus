@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_internet"
+        android:enabled="true"
+        android:icon="@drawable/internet"
+        android:title="@string/menu_internet"/>
+    <item
+        android:id="@+id/menu_tv"
+        android:enabled="true"
+        android:icon="@drawable/television"
+        android:title="@string/menu_tv"/>
+    <item
+        android:id="@+id/menu_etc"
+        android:enabled="true"
+        android:icon="@drawable/other"
+        android:title="@string/menu_other"/>
+
+</menu>
