@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
     android:label="MainNavigation"
-    app:startDestination="@id/mainActivity">
-
-    <activity
-        android:id="@+id/mainActivity"
-        android:name="com.cakestwix.sanaplus.MainActivity"
-        android:label="@string/menu_internet" />
+    app:startDestination="@id/internetFragment">
+    <fragment
+        android:id="@+id/internetFragment"
+        android:name="com.cakestwix.sanaplus.InternetFragment"
+        android:label="fragment_internet"
+        tools:layout="@layout/fragment_internet" />
+    <fragment
+        android:id="@+id/otherFragment"
+        android:name="com.cakestwix.sanaplus.OtherFragment"
+        android:label="fragment_other"
+        tools:layout="@layout/fragment_other" />
+    <fragment
+        android:id="@+id/tvFragment"
+        android:name="com.cakestwix.sanaplus.TvFragment"
+        android:label="fragment_tv"
+        tools:layout="@layout/fragment_tv" />
 </navigation>

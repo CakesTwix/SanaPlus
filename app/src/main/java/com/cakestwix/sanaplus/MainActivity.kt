@@ -3,13 +3,13 @@ package com.cakestwix.sanaplus
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.widget.Switch
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
+import androidx.fragment.app.Fragment
 import com.cakestwix.sanaplus.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationBarView
 import okhttp3.*
@@ -35,20 +35,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         var bottonNavigationBarView = findViewById<NavigationBarView>(R.id.bottom_navigation)
         bottonNavigationBarView.setOnItemSelectedListener { item ->
             when(item.itemId) {
-                R.id.menu_internet -> {
-                    // Respond to navigation item 1 click
-                    true
-                }
-                R.id.menu_tv -> {
-                    // Respond to navigation item 2 click
-                    val changePage = Intent(this, this::class.java)
-                    startActivity(changePage)
-                    true
-                }
-                R.id.menu_etc -> {
-                    // Respond to navigation item 2 click
-                    true
-                }
+                R.id.menu_internet -> replaceFragment(InternetFragment())
+                R.id.menu_tv -> replaceFragment(TvFragment())
+                R.id.menu_etc -> replaceFragment(OtherFragment())
                 else -> false
             }
         }
@@ -81,30 +70,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     findViewById<TextView>(R.id.tVfio).text =
                         Jobject.getJSONObject("data").getJSONObject("pers_section")
                             .getJSONObject("fio").getString("value")
-                    // Balance
-                    findViewById<TextView>(R.id.tVBalance).text =
-                        Jobject.getJSONObject("data").getJSONObject("fin_section")
-                            .getJSONObject("balance_curdate").getString("value")
-
-                    // Status
-                    findViewById<TextView>(R.id.tVStatus).text =
-                        Jobject.getJSONObject("data").getJSONObject("serv_section")
-                            .getJSONObject("inet").getJSONObject("status").getString("value")
-
-                    // Speed
-                    findViewById<TextView>(R.id.tVSpeed).text =
-                        Jobject.getJSONObject("data").getJSONObject("serv_section")
-                            .getJSONObject("inet").getJSONObject("packet").getString("value")
-
-                    // Date Stop
-                    findViewById<TextView>(R.id.tVDateStop).text =
-                        Jobject.getJSONObject("data").getJSONObject("fin_section")
-                            .getJSONObject("date_stop").getString("value")
-
-                    // Credit
-                    findViewById<TextView>(R.id.tVCredit).text =
-                        Jobject.getJSONObject("data").getJSONObject("fin_section")
-                            .getJSONObject("credit").getString("value")
                 }
             }
         })
@@ -118,5 +83,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             else -> {
             }
         }
+    }
+
+    private fun replaceFragment(fragment : Fragment): Boolean {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.nav_host_fragment,fragment)
+            .commit()
+        return true
     }
 }
