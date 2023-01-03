@@ -72,6 +72,10 @@ class InternetFragment : Fragment() {
                     binding.tVCredit.text =
                         Jobject.getJSONObject("data").getJSONObject("fin_section")
                             .getJSONObject("credit").getString("value")
+
+                    // SummaAll
+                    binding.tVSummaAll.text =
+                        Jobject.getJSONObject("data").getJSONObject("serv_section").getString("summa_all")
                 }
             }
         })
