@@ -1,7 +1,7 @@
 
 package com.cakestwix.sanaplus
 
-import android.content.Intent
+import SanaPlusModel
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -12,6 +12,7 @@ import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import com.cakestwix.sanaplus.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationBarView
+import com.google.gson.Gson
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityMainBinding
     private val client = OkHttpClient()
+    private val gson = Gson()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -62,14 +64,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             override fun onResponse(call: Call, response: Response) {
                 val jsonString = response.body!!.string()
                 Log.d("CakesTwix-Debug", jsonString)
+                val gsonJson = Gson().fromJson(jsonString, SanaPlusModel::class.java)
 
                 // UI
                 val Jobject = JSONObject(jsonString)
                 runOnUiThread {
                     // FIO
-                    findViewById<TextView>(R.id.tVfio).text =
-                        Jobject.getJSONObject("data").getJSONObject("pers_section")
-                            .getJSONObject("fio").getString("value")
+                    findViewById<TextView>(R.id.tVfio).text = gsonJson.data.pers_section.fio.value
                 }
             }
         })
