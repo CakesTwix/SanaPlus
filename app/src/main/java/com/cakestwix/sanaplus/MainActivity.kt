@@ -2,15 +2,17 @@
 package com.cakestwix.sanaplus
 
 import SanaPlusModel
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Switch
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import com.cakestwix.sanaplus.databinding.ActivityMainBinding
+import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.navigation.NavigationBarView
 import com.google.gson.Gson
 import okhttp3.*
@@ -24,7 +26,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityMainBinding
     private val client = OkHttpClient()
-    private val gson = Gson()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -32,6 +33,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Switch
+        findViewById<MaterialSwitch>(R.id.switch1).setOnClickListener(this)
 
         // NavigationBar
         var bottonNavigationBarView = findViewById<NavigationBarView>(R.id.bottom_navigation)
@@ -79,7 +83,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.switch1 -> {
-                Log.d("CakesTwix", findViewById<Switch>(R.id.switch1).isChecked.toString())
+                startActivity(Intent(this, LoginActivity::class.java))
             }
             else -> {
             }
