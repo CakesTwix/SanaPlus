@@ -16,4 +16,5 @@
     <string name="SummaAll">Monthly</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
+    <string name="log_in">Log in</string>
 </resources>

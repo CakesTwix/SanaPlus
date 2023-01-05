@@ -3,83 +3,60 @@ package com.cakestwix.sanaplus
 
 import SanaPlusModel
 import android.content.Intent
+import android.content.SharedPreferences
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
+import com.cakestwix.sanaplus.API.SanaRequest
 import com.cakestwix.sanaplus.databinding.ActivityMainBinding
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.navigation.NavigationBarView
 import com.google.gson.Gson
-import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONObject
-import java.io.IOException
 
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener, OnSharedPreferenceChangeListener {
 
     private lateinit var binding: ActivityMainBinding
-    private val client = OkHttpClient()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
 
+        val sharedPref = getSharedPreferences("Account", MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putString("test", "test")
+            apply()
+        }
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Switch
+        // Update Data
+        // TODO: Delete hardcode, :(
+        SanaRequest("","", sharedPref).updateData()
+
+        // Switch Listener
         findViewById<MaterialSwitch>(R.id.switch1).setOnClickListener(this)
+
+        // Pref Listener
+        sharedPref.registerOnSharedPreferenceChangeListener(this)
 
         // NavigationBar
         var bottonNavigationBarView = findViewById<NavigationBarView>(R.id.bottom_navigation)
         bottonNavigationBarView.setOnItemSelectedListener { item ->
-            when(item.itemId) {
+            when (item.itemId) {
                 R.id.menu_internet -> replaceFragment(InternetFragment())
                 R.id.menu_tv -> replaceFragment(TvFragment())
                 R.id.menu_etc -> replaceFragment(OtherFragment())
                 else -> false
             }
         }
-
-        val JSON: MediaType? = "application/json; charset=utf-8".toMediaTypeOrNull()
-
-        // TODO: Remove this hardcode
-        val JSONObjectString = "{\"apikey\":\"\",\"action\":\"get_userdata\",\"data\":[\"fin_section\", \"serv_section\", \"pers_section\", \"prov_contacts\"],\"sess_id\":\"\"}"
-        var body:RequestBody = JSONObjectString.toRequestBody(JSON)
-
-
-        var request = Request.Builder()
-            .url("https://api.odessa.tv/userside/api.php")
-            .post(body)
-            .build()
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                Log.d("CakesTwix-Debug", e.toString())
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                val jsonString = response.body!!.string()
-                Log.d("CakesTwix-Debug", jsonString)
-                val gsonJson = Gson().fromJson(jsonString, SanaPlusModel::class.java)
-
-                // UI
-                val Jobject = JSONObject(jsonString)
-                runOnUiThread {
-                    // FIO
-                    findViewById<TextView>(R.id.tVfio).text = gsonJson.data.pers_section.fio.value
-                }
-            }
-        })
-
     }
+
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.switch1 -> {
@@ -96,5 +73,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             .replace(R.id.nav_host_fragment,fragment)
             .commit()
         return true
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        when(key){
+            "json" -> {
+                val gsonJson = Gson().fromJson(sharedPreferences!!.getString(key,""), SanaPlusModel::class.java)
+                findViewById<TextView>(R.id.tVfio).setText(gsonJson.data.pers_section.fio.value)
+            }
+        }
     }
 }
