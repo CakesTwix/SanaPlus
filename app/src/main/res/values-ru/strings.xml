@@ -1,2 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">SanaPlus</string>
+    <string name="action_settings">Настройки</string>
+    <string name="balance">Баланс</string>
+    <string name="status">Статус</string>
+    <string name="my_account">Личный кабинет</string>
+    <string name="speed">Скорость</string>
+    <string name="test">test</string>
+    <string name="datestop">Оплачен</string>
+    <string name="credit">Кредит</string>
+    <string name="menu_internet">Интернет</string>
+    <string name="menu_tv">ТВ</string>
+    <string name="menu_other">Другое</string>
+    <string name="SummaAll">Ежемесячно</string>
+    <string name="login">Логин</string>
+    <string name="password">Пароль</string>
+    <string name="log_in">Вход</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
