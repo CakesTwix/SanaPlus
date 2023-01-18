@@ -1,2 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">SanaPlus</string>
+    <string name="action_settings">Налаштування</string>
+    <string name="balance">Баланс</string>
+    <string name="status">Статус</string>
+    <string name="my_account">Особистий кабінет</string>
+    <string name="speed">Швидкість</string>
+    <string name="datestop">Оплатити</string>
+    <string name="credit">Кредит</string>
+    <string name="menu_internet">Інтернет</string>
+    <string name="menu_tv">TV</string>
+    <string name="menu_other">Інше</string>
+    <string name="SummaAll">Щомісячно</string>
+    <string name="login">Логін</string>
+    <string name="password">Пароль</string>
+    <string name="log_in">Вхід</string>
+</resources>
