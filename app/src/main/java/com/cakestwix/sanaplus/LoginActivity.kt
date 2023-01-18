@@ -1,34 +1,55 @@
 package com.cakestwix.sanaplus
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
+import android.content.SharedPreferences
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import com.google.android.material.textfield.TextInputEditText
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.OkHttpClient
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
+import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
+import com.cakestwix.sanaplus.API.SanaRequest
+import com.google.android.material.textfield.TextInputLayout
 
-class LoginActivity : AppCompatActivity(), View.OnClickListener {
-    private val client = OkHttpClient()
+class LoginActivity : AppCompatActivity(), View.OnClickListener,
+    OnSharedPreferenceChangeListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
+        findViewById<Button>(R.id.log_in).setOnClickListener(this)
         val sharedPref = getSharedPreferences("Account", MODE_PRIVATE)
-        findViewById<TextInputEditText>(R.id.login_text).setText(sharedPref.getString("test", "defaultValue"))
+        sharedPref?.registerOnSharedPreferenceChangeListener(this)
+
+        // Default
+        with(sharedPref.edit()) {
+            putBoolean("status", false)
+            apply()
+        }
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.log_in -> {
-                val login = findViewById<TextInputEditText>(R.id.login_text).text
-                val password = findViewById<TextInputEditText>(R.id.password_text).text
+                val sharedPref = getSharedPreferences("Account", MODE_PRIVATE)
 
-                val jsonObjectString = String.format("{\"apikey\":\"%s\",\"action\":\"get_userdata\",\"data\":[\"fin_section\", \"serv_section\", \"pers_section\", \"prov_contacts\"],\"sess_id\":\"%s\"}", login, password)
-                val body: RequestBody = jsonObjectString.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
+                val login = findViewById<TextInputLayout>(R.id.login_text).editText?.text.toString()
+                val password = findViewById<TextInputLayout>(R.id.password_text).editText?.text.toString()
+                if(login.isEmpty() or password.isEmpty()) { return }
+
+                SanaRequest(login,password, sharedPref).tryLogin()
             }
             else -> {
+            }
+        }
+    }
+
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        when(key){
+            "status" -> {
+                if(sharedPreferences!!.getBoolean(key,false)){
+                    startActivity(Intent(this, MainActivity::class.java))
+                }
             }
         }
     }

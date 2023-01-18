@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +19,7 @@ import com.google.android.material.navigation.NavigationBarView
 import com.google.gson.Gson
 
 
-class MainActivity : AppCompatActivity(), View.OnClickListener, OnSharedPreferenceChangeListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -27,23 +28,28 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnSharedPreferen
         super.onCreate(savedInstanceState)
 
         val sharedPref = getSharedPreferences("Account", MODE_PRIVATE)
-        with(sharedPref.edit()) {
-            putString("test", "test")
-            apply()
+
+        // Check is have login
+        if (sharedPref.getBoolean("status", false)){
+            // Yes login ^_^
+            // Update Data
+            SanaRequest(sharedPref.getString("login", "")!!,sharedPref.getString("password", "")!!, sharedPref).updateData()
+        }
+        else {
+            // No login, then go to LoginActivity
+            startActivity(Intent(this, LoginActivity::class.java))
+            return
         }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Update Data
-        // TODO: Delete hardcode, :(
-        SanaRequest("","", sharedPref).updateData()
+        // Main card
+        val gsonJson = Gson().fromJson(sharedPref!!.getString("json",null), SanaPlusModel::class.java)
+        findViewById<TextView>(R.id.tVfio).text = gsonJson.data.pers_section.fio.value
 
         // Switch Listener
         findViewById<MaterialSwitch>(R.id.switch1).setOnClickListener(this)
-
-        // Pref Listener
-        sharedPref.registerOnSharedPreferenceChangeListener(this)
 
         // NavigationBar
         var bottonNavigationBarView = findViewById<NavigationBarView>(R.id.bottom_navigation)
@@ -73,14 +79,5 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnSharedPreferen
             .replace(R.id.nav_host_fragment,fragment)
             .commit()
         return true
-    }
-
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        when(key){
-            "json" -> {
-                val gsonJson = Gson().fromJson(sharedPreferences!!.getString(key,""), SanaPlusModel::class.java)
-                findViewById<TextView>(R.id.tVfio).setText(gsonJson.data.pers_section.fio.value)
-            }
-        }
     }
 }

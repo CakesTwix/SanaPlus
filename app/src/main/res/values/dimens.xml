@@ -1,3 +1,4 @@
 <resources>
     <dimen name="card_size">115dp</dimen>
+    <dimen name="marginStart_internet">8dp</dimen>
 </resources>

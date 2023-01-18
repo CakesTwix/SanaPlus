@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.cakestwix.sanaplus.databinding.FragmentInternetBinding
 import com.google.gson.Gson
-import okhttp3.*
 
 class InternetFragment : Fragment(), OnSharedPreferenceChangeListener {
     lateinit var binding: FragmentInternetBinding
@@ -50,7 +49,7 @@ class InternetFragment : Fragment(), OnSharedPreferenceChangeListener {
             binding.tVBalance.text = gsonJson.data.fin_section.balance_curdate.value
 
             // Status
-            binding.tVStatus.text = gsonJson.data.serv_section.inet.value
+            binding.tVStatus.text = gsonJson.data.serv_section.inet.status.value
 
             // Speed
             binding.tVSpeed.text = gsonJson.data.serv_section.inet.packet.value
